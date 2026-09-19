@@ -1,0 +1,79 @@
+- generic [ref=f1e2]:
+  - generic [ref=f1e40]:
+    - banner [ref=f1e41]:
+      - generic [ref=f1e42]:
+        - generic [ref=f1e50]: Access AI
+        - generic [ref=f1e51]: local · gpu
+      - generic [ref=f1e53]:
+        - button "Open command palette" [ref=f1e54] [cursor=pointer]:
+          - generic [ref=f1e57]: ctrl
+          - generic [ref=f1e58]: K
+        - generic [ref=f1e59]: GuestGUEST
+        - button "Sign out" [ref=f1e60] [cursor=pointer]
+    - generic [ref=f1e64]:
+      - generic [ref=f1e65]:
+        - generic [ref=f1e66]:
+          - heading "Accessibility Console" [level=1] [ref=f1e67]
+          - paragraph [ref=f1e68]: See, speak, sign - on-device inference, no cloud, no quotas.
+        - generic [ref=f1e69]:
+          - generic [ref=f1e70]:
+            - text: 1.48s
+            - emphasis [ref=f1e71]: image p50
+          - generic [ref=f1e72]:
+            - text: "0"
+            - emphasis [ref=f1e73]: cloud calls
+          - generic [ref=f1e74]:
+            - text: "12"
+            - emphasis [ref=f1e75]: ISL phrases
+      - tablist "Features" [ref=f1e76]:
+        - tab "Screen Reader 1" [selected] [ref=f1e77] [cursor=pointer]:
+          - generic [ref=f1e79]: Screen Reader
+          - generic [ref=f1e80]: "1"
+        - tab "Text to Speech 2" [ref=f1e81] [cursor=pointer]:
+          - generic [ref=f1e82]: Text to Speech
+          - generic [ref=f1e83]: "2"
+        - tab "Speech to Sign 3" [ref=f1e84] [cursor=pointer]:
+          - generic [ref=f1e85]: Speech to Sign
+          - generic [ref=f1e86]: "3"
+      - main [ref=f1e87]:
+        - tabpanel "Screen Reader 1" [ref=f1e89]:
+          - generic [ref=f1e95]:
+            - heading "AI Screen Reader" [level=2] [ref=f1e96]
+            - paragraph [ref=f1e97]: Point, capture, and listen. Scene descriptions and text extraction in 1.5s.
+          - group "Screen reader input mode" [ref=f1e98]:
+            - button "Upload" [ref=f1e99] [cursor=pointer]
+            - button "Live Camera" [ref=f1e103] [cursor=pointer]
+          - button "Upload an image to describe" [ref=f1e107] [cursor=pointer]:
+            - paragraph [ref=f1e112]: Drop an image here, or click to browse
+    - contentinfo "System status" [ref=f1e113]:
+      - generic [ref=f1e114]: live
+      - generic [ref=f1e116]: cuda
+      - generic [ref=f1e117]: whisper:medium
+      - generic [ref=f1e118]: 335 req
+      - generic [ref=f1e119]: 952 MB
+      - generic [ref=f1e120]: 2211s up
+      - generic [ref=f1e121]: localhost:8000
+    - dialog "Command palette" [ref=f1e123]:
+      - generic [ref=f1e124]:
+        - textbox "Command input" [active] [ref=f1e125]:
+          - /placeholder: Type a command...
+        - generic [ref=f1e126]: esc
+      - generic [ref=f1e127]:
+        - button "Go to Screen Reader 1" [ref=f1e128] [cursor=pointer]:
+          - generic [ref=f1e132]: Go to Screen Reader
+          - generic [ref=f1e133]: "1"
+        - button "Go to Text to Speech 2" [ref=f1e134] [cursor=pointer]:
+          - generic [ref=f1e139]: Go to Text to Speech
+          - generic [ref=f1e140]: "2"
+        - button "Go to Speech to Sign 3" [ref=f1e141] [cursor=pointer]:
+          - generic [ref=f1e147]: Go to Speech to Sign
+          - generic [ref=f1e148]: "3"
+        - button "Toggle high contrast" [ref=f1e149] [cursor=pointer]
+        - button "Cycle text size" [ref=f1e154] [cursor=pointer]
+        - button "Copy system metrics as JSON" [ref=f1e158] [cursor=pointer]
+        - button "Sign out" [ref=f1e163] [cursor=pointer]
+      - generic [ref=f1e168]:
+        - generic [ref=f1e169]: ↑↓ navigate
+        - generic [ref=f1e170]: ↵ run
+        - generic [ref=f1e171]: Access AI Console
+  - status
