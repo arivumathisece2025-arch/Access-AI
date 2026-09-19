@@ -1,5 +1,31 @@
 # Benchmarks — Access-AI
 
+Engine: NVIDIA GeForce RTX 4060 (8 GB) · CUDA 12.4 · PyTorch 2.5.1+cu124 · Python 3.12
+Stack: Florence-2-base fp16 · faster-whisper medium fp16 · RapidOCR (ONNX) · edge-tts
+
+## Per-query latency (bench.py, docs/test.jpg)
+| Query | Run | Latency |
+|---|---|---|
+| image (fresh) | 1 | 1.48 s |
+| image (cached) | 2 | 0.00 s |
+| image (cached) | 3 | 0.00 s |
+| tts (30 KB mp3) | 1 | 1.12 s |
+| tts (30 KB mp3) | 2 | 0.94 s |
+
+## Memory
+| Metric | Value |
+|---|---|
+| RSS after warmup | 1550.1 MB |
+
+## Startup
+| Metric | Value |
+|---|---|
+| warmup (models already in VRAM) | 1.8 s |
+
+## Sustained load
+soak.py output pending (Block 4)
+# Benchmarks — Access-AI
+
 Measured latency for every user-facing operation **on the demo machine**, recorded
 after the model warmup completes. Judges see measured claims, not estimates.
 
