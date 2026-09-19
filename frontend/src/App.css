@@ -684,6 +684,225 @@ html.high-contrast .input-group input {
     }
 }
 
+/* Warm cinematic shell */
+body {
+    background: #0b1023;
+}
+
+.app-shell {
+    position: relative;
+    min-height: 100vh;
+}
+
+.app-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(600px 400px at 15% 8%, rgba(255, 158, 90, 0.16), transparent 60%), radial-gradient(700px 500px at 85% 18%, rgba(236, 72, 153, 0.12), transparent 60%), radial-gradient(900px 650px at 50% 95%, rgba(79, 70, 229, 0.2), transparent 65%);
+}
+
+.code-rain {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.16;
+    pointer-events: none;
+}
+
+.app-shell>.app {
+    position: relative;
+    z-index: 1;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+    align-items: center;
+    margin: 0.5rem 0 2rem;
+}
+
+.hero-title {
+    margin: 0 0 0.75rem;
+    color: #f8fafc;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.grad-text {
+    background: linear-gradient(90deg, #fbbf24, #fb7185, #c084fc);
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-sub {
+    max-width: 620px;
+    margin: 0 0 1.25rem;
+    color: #94a3b8;
+    font-size: 1.02rem;
+    line-height: 1.6;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.9rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(8px);
+}
+
+.stat-chip strong,
+.stat-chip span {
+    display: block;
+}
+
+.stat-chip strong {
+    color: #f8fafc;
+    font-size: 0.95rem;
+}
+
+.stat-chip span {
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+.stat-icon {
+    color: #fbbf24;
+}
+
+.hero-art {
+    position: relative;
+}
+
+.hero-art img {
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1.25rem;
+    box-shadow: 0 30px 60px -20px rgba(251, 146, 60, 0.25);
+}
+
+.hero-fallback {
+    display: flex;
+    aspect-ratio: 16 / 10;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    border-radius: 1.25rem;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(236, 72, 153, 0.25), rgba(99, 102, 241, 0.35));
+    color: #fde68a;
+}
+
+.hero-float {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 2rem;
+    background: rgba(15, 23, 42, 0.85);
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+}
+
+.hero-float-1 {
+    top: -14px;
+    left: 8%;
+    color: #fbbf24;
+}
+
+.hero-float-2 {
+    bottom: -12px;
+    left: 30%;
+    color: #fb7185;
+}
+
+.hero-float-3 {
+    top: 40%;
+    right: -10px;
+    color: #c084fc;
+}
+
+.tabs button {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+}
+
+.tabs button .tab-label {
+    position: relative;
+    z-index: 1;
+}
+
+.tabs button.active {
+    background: transparent;
+    color: #fff;
+}
+
+.tab-pill {
+    position: absolute;
+    inset: 0;
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.7);
+}
+
+.content {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.a11y-controls .btn,
+.a11y-controls .btn-small {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
+}
+
+html.high-contrast .code-rain,
+html.high-contrast .app-glow {
+    display: none;
+}
+
+html.high-contrast body {
+    background: #000;
+}
+
+@media (max-width: 860px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-float-3 {
+        right: 4%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-float {
+        animation: none !important;
+    }
+}
+
 @media (max-width: 520px) {
     .auth-card {
         padding: 1.5rem;

@@ -16,7 +16,7 @@ export default function ScreenReader() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => () => { streamRef.current?.getTracks().forEach((track) => track.stop()); cancelSpeech(); }, []);
-  useEffect(() => { if (mode === 'camera' && previewRef.current && streamRef.current) previewRef.current.srcObject = streamRef.current; }, [mode]);
+  useEffect(() => { if (mode === 'camera' && previewRef.current && streamRef.current) { previewRef.current.srcObject = streamRef.current; previewRef.current.play().catch(() => undefined); } }, [mode]);
 
   const runDescribe = async (blob: Blob, filename: string) => {
     setLoading(true); setError('');
@@ -26,7 +26,21 @@ export default function ScreenReader() {
   };
   const onFilePicked = (event: ChangeEvent<HTMLInputElement>) => { const file = event.target.files?.[0]; if (file) void runDescribe(file, file.name); };
   const onDrop = (event: DragEvent<HTMLDivElement>) => { event.preventDefault(); event.currentTarget.classList.remove('dragging'); const file = event.dataTransfer.files?.[0]; if (file && file.type.startsWith('image/')) void runDescribe(file, file.name); else setError('Dropped file is not an image.'); };
-  const startCamera = async () => { setError(''); try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); streamRef.current = stream; setMode('camera'); } catch { setError('Camera unavailable or permission denied.'); } };
+  const startCamera = async () => {
+    setError('');
+    const attempts: MediaStreamConstraints[] = [
+      { video: { facingMode: 'environment' }, audio: false },
+      { video: { width: { ideal: 1280 } }, audio: false },
+      { video: true, audio: false },
+    ];
+    let stream: MediaStream | null = null;
+    for (const constraints of attempts) {
+      try { stream = await navigator.mediaDevices.getUserMedia(constraints); break; } catch { stream = null; }
+    }
+    if (!stream) { setError('Camera blocked. Check Windows camera privacy, browser site permission, other apps using the camera, and any physical shutter key.'); return; }
+    streamRef.current = stream;
+    setMode('camera');
+  };
   const stopCamera = () => { streamRef.current?.getTracks().forEach((track) => track.stop()); streamRef.current = null; setMode('upload'); };
   const capture = async () => { const video = previewRef.current; if (!video || video.videoWidth === 0) { setError('Camera not ready.'); return; } const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight; const context = canvas.getContext('2d'); if (!context) return; context.drawImage(video, 0, 0); const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9)); if (blob) await runDescribe(blob, 'frame.jpg'); };
 
