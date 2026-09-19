@@ -1596,3 +1596,30 @@ html.high-contrast .lower-third { background: #000; color: #fff; }
 html.high-contrast .vchip.active, html.high-contrast .rchip.active { background: #000; color: #fff; border-color: #000; }
 html.high-contrast .scanline, html.high-contrast .vu.live i, html.high-contrast .ring { animation: none !important; }
 html.reduce-motion .scanline, html.reduce-motion .vu.live i, html.reduce-motion .ring, html.reduce-motion .rec-dot { animation: none !important; }
+
+/* --- v3 backfill: dashboard wrapper + auth form internals --- */
+.dashboard { display: flex; flex-direction: column; }
+.auth-form { display: flex; flex-direction: column; gap: 12px; }
+.auth-eyebrow { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--acc-dark); margin: 0 0 10px; }
+.strength-meter { display: flex; align-items: center; gap: 10px; }
+.strength-bars { display: flex; gap: 3px; flex: 1; }
+.strength-bar { height: 4px; flex: 1; border-radius: 2px; background: var(--line); transition: background-color .2s; }
+.strength-empty { height: 4px; flex: 1; border-radius: 2px; background: var(--line); }
+.strength-text { font-family: var(--mono); font-size: 10px; color: var(--ink-3); min-width: 52px; text-align: right; }
+html.high-contrast .strength-bar, html.high-contrast .strength-empty { background: #000; }
+html.high-contrast .auth-form input { border-color: #000; }
+
+/* addendum (not in the 8): AuthPage.tsx:119 builds the filled state as a dynamic `strength-${n}`
+   class. Without these four rules the filled bars keep background var(--line) - identical to
+   .strength-empty - so the meter renders as a flat grey track at every score. */
+.strength-bar.strength-1 { background: var(--err); }
+.strength-bar.strength-2 { background: var(--warn); }
+.strength-bar.strength-3 { background: var(--acc); }
+.strength-bar.strength-4 { background: var(--ok); }
+html.high-contrast .strength-bar.strength-1,
+html.high-contrast .strength-bar.strength-2,
+html.high-contrast .strength-bar.strength-3,
+html.high-contrast .strength-bar.strength-4 { background: #000; }
+/* the high-contrast rule above alone paints every bar #000, so filled vs empty would read
+   identically in the accessibility mode - keep the empty track white with a black outline. */
+html.high-contrast .strength-empty { background: #fff; border: 1px solid #000; }
