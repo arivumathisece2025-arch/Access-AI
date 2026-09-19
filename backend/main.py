@@ -11,6 +11,7 @@ import asyncio
 import hashlib
 import io
 import os
+import re
 import tempfile
 import time
 import wave
@@ -30,6 +31,7 @@ from PIL import Image
 from rapidocr_onnxruntime import RapidOCR
 from transformers import AutoModelForCausalLM, AutoProcessor
 
+from auth import router as auth_router
 from signbook import match_phrase
 
 # ---------------------------------------------------------------------------
@@ -44,6 +46,7 @@ WHISPER_COMPUTE = "float16" if DEVICE == "cuda" else "int8"
 DEFAULT_VOICE = os.environ.get("TTS_VOICE", "en-IN-NeerjaNeural")
 FLORENCE_TASK = "<CAPTION>"
 MAX_TTS_CHARS = 2000
+RATE_RE = re.compile(r"^[+-]\d{1,2}%$")
 
 # ---------------------------------------------------------------------------
 # Model loading (once, at import; server only accepts traffic after warmup)
@@ -112,6 +115,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(auth_router)
 
 
 @app.middleware("http")
@@ -124,7 +128,7 @@ async def count_requests(request, call_next):
 # ---------------------------------------------------------------------------
 # Inference helpers
 # ---------------------------------------------------------------------------
-def _downscale(image: Image.Image, max_edge: int = 1500) -> Image.Image:
+def _downscale(image: Image.Image, max_edge: int = 1280) -> Image.Image:
     w, h = image.size
     scale = min(1.0, max_edge / max(w, h))
     if scale < 1.0:
@@ -150,11 +154,20 @@ def _caption(image: Image.Image) -> str:
     return parsed[FLORENCE_TASK].strip()
 
 
+_SPACE_FIX = re.compile(
+    r"(?<=[a-z])(?=[A-Z])|(?<=\d)(?=[A-Z][a-z])|(?<=[a-z])(?=\d{4,})"
+)
+
+
+def _fix_spacing(line: str) -> str:
+    return _SPACE_FIX.sub(" ", line)
+
+
 def _ocr(image: Image.Image) -> str:
     result, _elapse = ocr_engine(np.array(image))
     if not result:
         return ""
-    return " ".join(item[1] for item in result).strip()
+    return " ".join(_fix_spacing(item[1]) for item in result).strip()
 
 
 def _transcribe(path: str) -> tuple[str, str]:
@@ -223,19 +236,27 @@ async def describe_image(file: UploadFile = File(...)):
     image = _downscale(image)
 
     loop = asyncio.get_running_loop()
+    t_stage = time.perf_counter()
     async with INFERENCE_SEM:
         caption, ocr_text = await asyncio.gather(
             loop.run_in_executor(executor, _caption, image),
             loop.run_in_executor(executor, _ocr, image),
         )
+    stage_s = time.perf_counter() - t_stage
 
-    full = f"{caption}. Text found: {ocr_text}" if ocr_text else caption
+    if ocr_text and len(ocr_text) > 160:
+        full = f"A document with printed text. {ocr_text}"
+    elif ocr_text:
+        full = f"{caption}. Text found: {ocr_text}"
+    else:
+        full = caption
     payload = {
         "caption": caption,
         "extracted_text": ocr_text or "No text detected",
         "full_description": full,
         "cached": False,
         "elapsed_s": round(time.perf_counter() - t0, 2),
+        "inference_s": round(stage_s, 2),
     }
     IMAGE_CACHE.set(digest, payload)
     return JSONResponse(content=payload)
@@ -299,17 +320,23 @@ async def speech_to_sign(file: UploadFile = File(...)):
 
 
 @app.post("/text-to-speech")
-async def text_to_speech(text: str = Form(...), voice: str = Form(DEFAULT_VOICE)):
+async def text_to_speech(
+    text: str = Form(...),
+    voice: str = Form(DEFAULT_VOICE),
+    rate: str = Form("+0%"),
+):
     text = text.strip()
     if not text:
         return JSONResponse(status_code=422, content={"error": "Text must not be empty"})
     if len(text) > MAX_TTS_CHARS:
         return JSONResponse(status_code=413,
                             content={"error": f"Text exceeds {MAX_TTS_CHARS} characters"})
+    if not RATE_RE.match(rate):
+        return JSONResponse(status_code=422, content={"error": "Rate must be like +10% or -20%"})
 
     tmp = os.path.join(tempfile.gettempdir(), f"tts_{uuid4().hex}.mp3")
     try:
-        communicate = edge_tts.Communicate(text, voice)
+        communicate = edge_tts.Communicate(text, voice, rate=rate)
         await communicate.save(tmp)
         with open(tmp, "rb") as fh:
             audio = fh.read()

@@ -1,58 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
+import { Accessibility, ArrowRight, Command, Contrast, Copy, Eye, Hand, Home, LogOut, PanelLeftClose, PanelLeftOpen, Type, Volume2, Waves } from 'lucide-react';
+import AuthPage from './components/AuthPage';
+import CommandPalette from './components/CommandPalette';
+import type { PaletteAction } from './components/CommandPalette';
 import ScreenReader from './components/ScreenReader';
-import TextToSpeech from './components/TextToSpeech';
 import SignTranslator from './components/SignTranslator';
-import { fetchMetrics } from './lib/api';
+import TextToSpeech from './components/TextToSpeech';
+import { ToastProvider, useToast } from './components/Toasts';
+import { API_BASE, fetchMetrics } from './lib/api';
 import type { Metrics } from './lib/api';
+import { clearToken, getMe, getToken, setToken } from './lib/auth';
+import type { AuthResponse, User } from './lib/auth';
 import './App.css';
 
-type Tab = 'reader' | 'tts' | 'sign';
-const FONT_STEPS = [1, 1.15, 1.3];
-
-export default function App() {
-  const [tab, setTab] = useState<Tab>('reader');
-  const [highContrast, setHighContrast] = useState(false);
-  const [fontStep, setFontStep] = useState(0);
-  const [metrics, setMetrics] = useState<Metrics | null>(null);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('high-contrast', highContrast);
-    document.documentElement.style.fontSize = `${FONT_STEPS[fontStep] * 100}%`;
-  }, [highContrast, fontStep]);
-
-  useEffect(() => {
-    const poll = async () => {
-      try { setMetrics(await fetchMetrics()); } catch { setMetrics(null); }
-    };
-    void poll();
-    const id = window.setInterval(() => void poll(), 5000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  return (
-    <div className="app">
-      <header className="header">
-        <h1>Access AI</h1>
-        <p className="tagline">See, speak, sign — accessibility that works with or without internet.</p>
-        <div className="a11y-controls" role="group" aria-label="Display settings">
-          <button className="btn btn-small" aria-pressed={highContrast} onClick={() => setHighContrast((v) => !v)}>High contrast</button>
-          <button className="btn btn-small" onClick={() => setFontStep((s) => (s + 1) % FONT_STEPS.length)}>Text size: {['A', 'A+', 'A++'][fontStep]}</button>
-        </div>
-      </header>
-      <nav className="tabs" role="tablist" aria-label="Features">
-        <button role="tab" id="tab-reader" aria-selected={tab === 'reader'} aria-controls="panel-reader" className={tab === 'reader' ? 'active' : ''} onClick={() => setTab('reader')}>Screen Reader</button>
-        <button role="tab" id="tab-tts" aria-selected={tab === 'tts'} aria-controls="panel-tts" className={tab === 'tts' ? 'active' : ''} onClick={() => setTab('tts')}>Text to Speech</button>
-        <button role="tab" id="tab-sign" aria-selected={tab === 'sign'} aria-controls="panel-sign" className={tab === 'sign' ? 'active' : ''} onClick={() => setTab('sign')}>Speech to Sign</button>
-      </nav>
-      <main className="content">
-        {tab === 'reader' && <ScreenReader />}
-        {tab === 'tts' && <TextToSpeech />}
-        {tab === 'sign' && <SignTranslator />}
-      </main>
-      <footer className="footer">
-        {metrics ? <p className="metrics" aria-label="Live system metrics">{metrics.device} · {metrics.whisper_model} · {metrics.requests_served} requests · {metrics.rss_mb} MB · {Math.round(metrics.uptime_s)}s up</p> : <p className="metrics">backend offline</p>}
-        <p>Built for HackSpora 2.0 · Access AI</p>
-      </footer>
-    </div>
-  );
+type View = 'home' | 'reader' | 'tts' | 'sign';
+type Prefs = { contrast: boolean; fontStep: number; reduceMotion: boolean; focusEnh: boolean; collapsed: boolean };
+const FONT_STEPS = [1, 1.15, 1.3]; const PREFS_KEY = 'access_ai_prefs';
+const DEFAULT_PREFS: Prefs = { contrast: false, fontStep: 0, reduceMotion: false, focusEnh: false, collapsed: false };
+const NAV: { id: View; label: string; icon: typeof Home; key?: string }[] = [{ id: 'home', label: 'Home', icon: Home }, { id: 'reader', label: 'Screen Reader', icon: Eye, key: '1' }, { id: 'tts', label: 'Text to Speech', icon: Volume2, key: '2' }, { id: 'sign', label: 'Speech to Sign', icon: Hand, key: '3' }];
+const QUICK = [{ view: 'reader' as View, icon: Eye, tone: 'tone-indigo', title: 'Read Screen', desc: 'Describe what is on your screen or in a photo, then hear it aloud.' }, { view: 'tts' as View, icon: Volume2, tone: 'tone-coral', title: 'Speak Text', desc: 'Convert written content into natural neural speech.' }, { view: 'sign' as View, icon: Hand, tone: 'tone-teal', title: 'Translate Sign', desc: 'Turn spoken language into Indian Sign Language video.' }];
+function loadPrefs(): Prefs { try { return { ...DEFAULT_PREFS, ...(JSON.parse(localStorage.getItem(PREFS_KEY) ?? '{}') as Partial<Prefs>) }; } catch { return DEFAULT_PREFS; } }
+function Dashboard({ go, metrics }: { go: (view: View) => void; metrics: Metrics | null }) { return <div className="dashboard"><div className="dash-head"><h1>Welcome to Access AI</h1><p>Your intelligent accessibility companion. Everything runs on-device - no cloud, no quotas.</p></div><div className="qa-grid">{QUICK.map((item, index) => <motion.button key={item.view} className="qa-card" onClick={() => go(item.view)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} whileHover={{ y: -3 }}><span className={`qa-icon ${item.tone}`}><item.icon size={20} aria-hidden="true" /></span><strong>{item.title}</strong><span className="qa-desc">{item.desc}</span><span className="qa-cta">Open <ArrowRight size={14} aria-hidden="true" /></span></motion.button>)}</div><div className="health-strip" aria-label="System health"><span className="health-item"><i className={`dot ${metrics ? 'dot-ok' : 'dot-err'}`} />{metrics ? 'engine live' : 'engine offline'}</span><span className="health-item">{metrics?.device ?? '-'}</span><span className="health-item">whisper:{metrics?.whisper_model ?? '-'}</span><span className="health-item">1.48s image p50</span><span className="health-item">0 cloud calls</span></div></div>; }
+function Shell() {
+  const toast = useToast(); const [user, setUser] = useState<User | null>(null); const [authLoading, setAuthLoading] = useState(true); const [view, setView] = useState<View>('home'); const [prefs, setPrefs] = useState<Prefs>(loadPrefs); const [paletteOpen, setPaletteOpen] = useState(false); const [metrics, setMetrics] = useState<Metrics | null>(null);
+  useEffect(() => { const check = async () => { const token = getToken(); if (token) { try { setUser(await getMe(token)); } catch { clearToken(); } } setAuthLoading(false); }; void check(); }, []);
+  useEffect(() => { const root = document.documentElement; root.classList.toggle('high-contrast', prefs.contrast); root.classList.toggle('reduce-motion', prefs.reduceMotion); root.classList.toggle('focus-enh', prefs.focusEnh); root.style.fontSize = `${FONT_STEPS[prefs.fontStep] * 100}%`; localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }, [prefs]);
+  useEffect(() => { if (!user) return; const poll = async () => { try { setMetrics(await fetchMetrics()); } catch { setMetrics(null); } }; void poll(); const id = window.setInterval(() => void poll(), 5000); return () => window.clearInterval(id); }, [user]);
+  useEffect(() => { const onKey = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setPaletteOpen((value) => !value); return; } const target = event.target as HTMLElement; if (!['INPUT', 'TEXTAREA'].includes(target.tagName) && !event.metaKey && !event.ctrlKey && !event.altKey) { const hit = NAV.find((item) => item.key === event.key); if (hit) setView(hit.id); } }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, []);
+  const updatePrefs = (patch: Partial<Prefs>) => setPrefs((current) => ({ ...current, ...patch })); const handleAuth = (response: AuthResponse) => { setToken(response.token); setUser(response.user); }; const handleLogout = () => { clearToken(); setUser(null); setView('home'); };
+  const actions = useMemo<PaletteAction[]>(() => [...NAV.map((item) => ({ id: `go-${item.id}`, label: `Go to ${item.label}`, hint: item.key, icon: item.icon, run: () => setView(item.id) })), { id: 'contrast', label: 'Toggle high contrast', icon: Contrast, run: () => updatePrefs({ contrast: !prefs.contrast }) }, { id: 'textsize', label: 'Cycle text size', icon: Type, run: () => updatePrefs({ fontStep: (prefs.fontStep + 1) % FONT_STEPS.length }) }, { id: 'motion', label: 'Toggle reduced motion', icon: Waves, run: () => updatePrefs({ reduceMotion: !prefs.reduceMotion }) }, { id: 'copy-metrics', label: 'Copy system metrics as JSON', icon: Copy, run: () => { if (!metrics) { toast('error', 'Metrics unavailable - backend offline'); return; } void navigator.clipboard.writeText(JSON.stringify(metrics, null, 2)); toast('success', 'Metrics copied to clipboard'); } }, { id: 'logout', label: 'Sign out', icon: LogOut, run: handleLogout }], [metrics, prefs, toast]);
+  if (authLoading) return <div className="app-loading" role="status" aria-label="Loading Access AI"><div className="loading-spinner" /></div>; if (!user) return <AuthPage onAuth={handleAuth} />; const current = NAV.find((item) => item.id === view);
+  return <MotionConfig reducedMotion={prefs.reduceMotion ? 'always' : 'user'}><div className="shell"><aside className={prefs.collapsed ? 'sidebar collapsed' : 'sidebar'} aria-label="Primary"><div className="side-top"><span className="logo-mark"><Accessibility size={16} aria-hidden="true" /></span>{!prefs.collapsed && <span className="product-name">Access AI</span>}<button className="icon-button collapse-btn" onClick={() => updatePrefs({ collapsed: !prefs.collapsed })} aria-label={prefs.collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>{prefs.collapsed ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}</button></div><nav className="side-nav" aria-label="Tools">{NAV.map((item) => <button key={item.id} className={view === item.id ? 'side-link active' : 'side-link'} onClick={() => setView(item.id)} aria-current={view === item.id ? 'page' : undefined} title={item.label}><item.icon size={16} aria-hidden="true" />{!prefs.collapsed && <span>{item.label}</span>}{!prefs.collapsed && item.key && <kbd>{item.key}</kbd>}</button>)}</nav>{!prefs.collapsed && <div className="side-a11y" role="group" aria-label="Accessibility controls"><p className="side-label">Accessibility</p><div className="seg" role="group" aria-label="Contrast"><button className={!prefs.contrast ? 'seg-btn active' : 'seg-btn'} onClick={() => updatePrefs({ contrast: false })}>Normal</button><button className={prefs.contrast ? 'seg-btn active' : 'seg-btn'} onClick={() => updatePrefs({ contrast: true })}>High</button></div><div className="seg" role="group" aria-label="Text size">{['A', 'A+', 'A++'].map((label, index) => <button key={label} className={prefs.fontStep === index ? 'seg-btn active' : 'seg-btn'} onClick={() => updatePrefs({ fontStep: index })}>{label}</button>)}</div><div className="seg" role="group" aria-label="Motion"><button className={!prefs.reduceMotion ? 'seg-btn active' : 'seg-btn'} onClick={() => updatePrefs({ reduceMotion: false })}>Motion</button><button className={prefs.reduceMotion ? 'seg-btn active' : 'seg-btn'} onClick={() => updatePrefs({ reduceMotion: true })}>Reduced</button></div><label className="check-row"><input type="checkbox" checked={prefs.focusEnh} onChange={(event) => updatePrefs({ focusEnh: event.target.checked })} />Enhanced focus rings</label></div>}<div className="side-bottom"><span className="user-chip">{user.display_name}{user.guest && <span className="guest-badge">GUEST</span>}</span><button className="icon-button" onClick={handleLogout} aria-label="Sign out"><LogOut size={14} /></button></div></aside><div className="main-area"><header className="topstrip"><span className="crumb">{current?.label ?? 'Home'}</span><div className="strip-right"><span className="env-pill"><i className={`dot ${metrics ? 'dot-ok' : 'dot-err'}`} />local · gpu</span><button className="kbd-button" onClick={() => setPaletteOpen(true)} aria-label="Open command palette"><Command size={13} aria-hidden="true" /> <kbd>ctrl</kbd><kbd>K</kbd></button></div></header><main className="main-content"><AnimatePresence mode="wait"><motion.div key={view} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.18 }}>{view === 'home' && <Dashboard go={setView} metrics={metrics} />}{view === 'reader' && <ScreenReader />}{view === 'tts' && <TextToSpeech />}{view === 'sign' && <SignTranslator />}</motion.div></AnimatePresence></main><footer className="statusbar" aria-label="System status"><span className="status-item"><i className={`dot ${metrics ? 'dot-ok' : 'dot-err'}`} />{metrics ? 'live' : 'offline'}</span><span className="status-item">{metrics?.device ?? '-'}</span><span className="status-item">whisper:{metrics?.whisper_model ?? '-'}</span><span className="status-item">{metrics?.requests_served ?? 0} req</span><span className="status-item">{metrics?.rss_mb ?? 0} MB</span><span className="status-item status-right">{API_BASE.replace(/^https?:\/\//, '')}</span></footer></div><nav className="bottom-nav" aria-label="Mobile navigation">{NAV.map((item) => <button key={item.id} className={view === item.id ? 'active' : ''} onClick={() => setView(item.id)} aria-current={view === item.id ? 'page' : undefined}><item.icon size={19} aria-hidden="true" />{item.label.replace('Text to ', '').replace('Speech to ', '')}</button>)}</nav><CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} actions={actions} /></div></MotionConfig>;
 }
+export default function App() { return <ToastProvider><Shell /></ToastProvider>; }
