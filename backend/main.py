@@ -30,6 +30,7 @@ from PIL import Image
 from rapidocr_onnxruntime import RapidOCR
 from transformers import AutoModelForCausalLM, AutoProcessor
 
+from auth import router as auth_router
 from signbook import match_phrase
 
 # ---------------------------------------------------------------------------
@@ -112,6 +113,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(auth_router)
 
 
 @app.middleware("http")

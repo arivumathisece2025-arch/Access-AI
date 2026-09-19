@@ -7,6 +7,7 @@ venv/
 
 # Runtime temp + logs
 backend/*.log
+backend/access_ai.db
 backend/temp_*
 backend/chunk_*
 backend/tts_*
