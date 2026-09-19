@@ -1,0 +1,39 @@
+- generic [ref=f13e38]:
+  - banner [ref=f13e39]:
+    - generic [ref=f13e40]:
+      - heading "Access AI" [level=1] [ref=f13e41]
+      - generic [ref=f13e42]:
+        - generic [ref=f13e43]: Guest GUEST
+        - button "Sign out" [ref=f13e44] [cursor=pointer]
+    - paragraph [ref=f13e48]: See, speak, sign — accessibility that works with or without internet.
+    - group "Display settings" [ref=f13e49]:
+      - button "High contrast" [ref=f13e50] [cursor=pointer]
+      - 'button "Text size: A" [ref=f13e51] [cursor=pointer]'
+  - tablist "Features" [ref=f13e52]:
+    - tab "Screen Reader" [ref=f13e53] [cursor=pointer]
+    - tab "Text to Speech" [ref=f13e54] [cursor=pointer]
+    - tab "Speech to Sign" [active] [selected] [ref=f13e55] [cursor=pointer]
+  - main [ref=f13e56]:
+    - tabpanel "Speech to Sign" [ref=f13e116]:
+      - generic [ref=f13e124]:
+        - heading "Speech to Sign Language" [level=2] [ref=f13e125]
+        - paragraph [ref=f13e126]: Real-time Indian Sign Language translation for critical phrases.
+      - generic "Supported phrases" [ref=f13e127]:
+        - generic [ref=f13e128]: I need help
+        - generic [ref=f13e129]: I need water
+        - generic [ref=f13e130]: Where is the hospital
+        - generic [ref=f13e131]: My name is
+        - generic [ref=f13e132]: Thank you
+        - generic [ref=f13e133]: I am sorry
+        - generic [ref=f13e134]: "Yes"
+        - generic [ref=f13e135]: "No"
+        - generic [ref=f13e136]: I have pain here
+        - generic [ref=f13e137]: I need medicine
+        - generic [ref=f13e138]: Call my family
+        - generic [ref=f13e139]: I do not understand
+      - generic [ref=f13e140]:
+        - button "Start listening" [ref=f13e141] [cursor=pointer]
+        - paragraph [ref=f13e148]: Tap to speak
+  - contentinfo [ref=f13e81]:
+    - paragraph [ref=f13e82]: cuda · medium · 101 requests · 1541.7 MB · 943s up
+    - paragraph [ref=f13e83]: Built for HackSpora 2.0 · Access AI
