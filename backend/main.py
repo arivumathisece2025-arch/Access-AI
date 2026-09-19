@@ -136,6 +136,7 @@ def _caption(image: Image.Image) -> str:
     inputs = processor(text=FLORENCE_TASK, images=image, return_tensors="pt")
     if DEVICE == "cuda":
         inputs = {k: v.to("cuda") for k, v in inputs.items()}
+        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=torch.float16)
     with torch.no_grad():
         generated = caption_model.generate(
             input_ids=inputs["input_ids"],
