@@ -35,3 +35,6 @@ Thumbs.db
 !.vscode/settings.json
 !.vscode/mcp.json
 !.vscode/extensions.json
+
+# Browser-session debris from the Playwright MCP server (regenerates on every run)
+.playwright-mcp/
