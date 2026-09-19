@@ -3,7 +3,7 @@ import axios from 'axios';
 export const API_BASE: string = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
 const http = axios.create({ baseURL: API_BASE, timeout: 120000 });
 
-export interface DescribeResult { caption: string; extracted_text: string; full_description: string; cached: boolean; elapsed_s: number; }
+export interface DescribeResult { caption: string; extracted_text: string; full_description: string; cached: boolean; elapsed_s: number; inference_s?: number; }
 export interface TranscribeResult { transcription: string; language: string; }
 export interface SignPhrasePayload { phrase_id: string; text: string; gloss: string[]; clip: string; }
 export interface SignResult { transcript: string; phrase: SignPhrasePayload | null; match_score: number; }

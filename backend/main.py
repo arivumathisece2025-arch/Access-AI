@@ -11,6 +11,7 @@ import asyncio
 import hashlib
 import io
 import os
+import re
 import tempfile
 import time
 import wave
@@ -126,7 +127,7 @@ async def count_requests(request, call_next):
 # ---------------------------------------------------------------------------
 # Inference helpers
 # ---------------------------------------------------------------------------
-def _downscale(image: Image.Image, max_edge: int = 1500) -> Image.Image:
+def _downscale(image: Image.Image, max_edge: int = 1280) -> Image.Image:
     w, h = image.size
     scale = min(1.0, max_edge / max(w, h))
     if scale < 1.0:
@@ -152,11 +153,20 @@ def _caption(image: Image.Image) -> str:
     return parsed[FLORENCE_TASK].strip()
 
 
+_SPACE_FIX = re.compile(
+    r"(?<=[a-z])(?=[A-Z])|(?<=\d)(?=[A-Z][a-z])|(?<=[a-z])(?=\d{4,})"
+)
+
+
+def _fix_spacing(line: str) -> str:
+    return _SPACE_FIX.sub(" ", line)
+
+
 def _ocr(image: Image.Image) -> str:
     result, _elapse = ocr_engine(np.array(image))
     if not result:
         return ""
-    return " ".join(item[1] for item in result).strip()
+    return " ".join(_fix_spacing(item[1]) for item in result).strip()
 
 
 def _transcribe(path: str) -> tuple[str, str]:
@@ -225,19 +235,27 @@ async def describe_image(file: UploadFile = File(...)):
     image = _downscale(image)
 
     loop = asyncio.get_running_loop()
+    t_stage = time.perf_counter()
     async with INFERENCE_SEM:
         caption, ocr_text = await asyncio.gather(
             loop.run_in_executor(executor, _caption, image),
             loop.run_in_executor(executor, _ocr, image),
         )
+    stage_s = time.perf_counter() - t_stage
 
-    full = f"{caption}. Text found: {ocr_text}" if ocr_text else caption
+    if ocr_text and len(ocr_text) > 160:
+        full = f"A document with printed text. {ocr_text}"
+    elif ocr_text:
+        full = f"{caption}. Text found: {ocr_text}"
+    else:
+        full = caption
     payload = {
         "caption": caption,
         "extracted_text": ocr_text or "No text detected",
         "full_description": full,
         "cached": False,
         "elapsed_s": round(time.perf_counter() - t0, 2),
+        "inference_s": round(stage_s, 2),
     }
     IMAGE_CACHE.set(digest, payload)
     return JSONResponse(content=payload)
