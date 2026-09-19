@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Access AI",
+    "slug": "access-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": { "backgroundColor": "#000000" },
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Access AI uses the camera to describe your surroundings out loud."
+      }
+    },
+    "android": {
+      "usesCleartextTraffic": true,
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Access AI uses the camera to describe your surroundings out loud."
+        }
+      ]
+    ]
+  }
+}
