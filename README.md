@@ -199,6 +199,7 @@ Access-AI/
 │   └── package.json
 └── docs/
     ├── BENCH.md             # Performance numbers
+    ├── DEMO_REHEARSAL.md    # Three-minute pitch and clip checklist
     └── test.jpg             # Benchmark fixture
 ```
 
