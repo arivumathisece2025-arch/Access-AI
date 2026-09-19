@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+*.egg-info/
+
+# Runtime temp + logs
+backend/*.log
+backend/temp_*
+backend/chunk_*
+backend/tts_*
+backend/stt_*
+backend/sign_*
+
+# Node
+node_modules/
+dist/
+*.local
+
+# TypeScript incremental build info (emitted by `tsc -b`)
+*.tsbuildinfo
+
+# Secrets
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code: share only the three team files
+.vscode/*
+!.vscode/settings.json
+!.vscode/mcp.json
+!.vscode/extensions.json
