@@ -1,0 +1,29 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "Access AI" [level=1] [ref=e5]
+    - paragraph [ref=e6]: See, speak, sign — accessibility that works with or without internet.
+    - group "Display settings" [ref=e7]:
+      - button "High contrast" [ref=e8] [cursor=pointer]
+      - 'button "Text size: A" [ref=e9] [cursor=pointer]'
+  - tablist "Features" [ref=e10]:
+    - tab "Screen Reader" [ref=e11] [cursor=pointer]
+    - tab "Text to Speech" [active] [selected] [ref=e12] [cursor=pointer]
+    - tab "Speech to Sign" [ref=e13] [cursor=pointer]
+  - main [ref=e14]:
+    - tabpanel "Text to Speech" [ref=e67]:
+      - heading "Text to Speech" [level=2] [ref=e68]
+      - paragraph [ref=e69]: Any text becomes natural speech. Neural voice when online, device voice when offline.
+      - generic [ref=e70]: Text to convert to speech
+      - textbox "Text to convert to speech" [ref=e71]:
+        - /placeholder: Paste or type anything - a medicine label, a question paper, a message...
+        - text: hi good
+      - paragraph [ref=e72]: 7 / 2000 characters
+      - generic "Sample texts" [ref=e73]:
+        - button "Take one tablet after food, twic..." [ref=e74] [cursor=pointer]
+        - 'button "Question 4: Explain the working ..." [ref=e75] [cursor=pointer]'
+      - generic [ref=e76]:
+        - button "Speak" [ref=e77] [cursor=pointer]
+        - button "Stop" [ref=e78] [cursor=pointer]
+  - contentinfo [ref=e22]:
+    - paragraph [ref=e23]: cuda · medium · 16 requests · 1421.7 MB · 1998s up
+    - paragraph [ref=e24]: Built for HackSpora 2.0 · Access AI

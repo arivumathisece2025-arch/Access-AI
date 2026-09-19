@@ -1,0 +1,25 @@
+- generic [ref=f12e38]:
+  - banner [ref=f12e39]:
+    - generic [ref=f12e40]:
+      - heading "Access AI" [level=1] [ref=f12e41]
+      - generic [ref=f12e42]:
+        - generic [ref=f12e43]: Guest GUEST
+        - button "Sign out" [ref=f12e44] [cursor=pointer]
+    - paragraph [ref=f12e48]: See, speak, sign — accessibility that works with or without internet.
+    - group "Display settings" [ref=f12e49]:
+      - button "High contrast" [ref=f12e50] [cursor=pointer]
+      - 'button "Text size: A" [ref=f12e51] [cursor=pointer]'
+  - tablist "Features" [ref=f12e52]:
+    - tab "Screen Reader" [selected] [ref=f12e53] [cursor=pointer]
+    - tab "Text to Speech" [ref=f12e54] [cursor=pointer]
+    - tab "Speech to Sign" [ref=f12e55] [cursor=pointer]
+  - main [ref=f12e56]:
+    - tabpanel "Screen Reader" [ref=f12e57]:
+      - heading "AI Screen Reader" [level=2] [ref=f12e58]
+      - paragraph [ref=f12e59]: Upload an image or use the live camera. The scene is described and printed text is read aloud.
+      - button "Use live camera" [ref=f12e61] [cursor=pointer]
+      - button "Upload an image to describe" [ref=f12e62] [cursor=pointer]:
+        - paragraph [ref=f12e63]: Drop an image here, or click / press Enter to browse
+  - contentinfo [ref=f12e64]:
+    - paragraph [ref=f12e65]: cuda · medium · 96 requests · 1541.7 MB · 497s up
+    - paragraph [ref=f12e66]: Built for HackSpora 2.0 · Access AI

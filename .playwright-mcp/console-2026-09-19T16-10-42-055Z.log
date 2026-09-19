@@ -1,0 +1,10 @@
+[    4578ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:5174/node_modules/.vite/deps/chunk-PJEEZAML.js?v=ec5cc994:21550
+[    4674ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5174/favicon.ico:0
+[  392697ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5174/src/components/TextToSpeech.tsx?t=1789834634746:0
+[  392697ms] [ERROR] [hmr] Failed to reload /src/components/TextToSpeech.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5174/@vite/client:175
+[  392698ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5174/src/components/ScreenReader.tsx?t=1789834634746:0
+[  392698ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5174/src/components/SignTranslator.tsx?t=1789834634747:0
+[  392698ms] [ERROR] [hmr] Failed to reload /src/components/ScreenReader.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5174/@vite/client:175
+[  392698ms] [ERROR] [hmr] Failed to reload /src/components/SignTranslator.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5174/@vite/client:175
+[  431711ms] [ERROR] [hmr] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5174/@vite/client:175
+[  431794ms] [ERROR] [hmr] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:5174/@vite/client:175

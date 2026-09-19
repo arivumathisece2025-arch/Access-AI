@@ -1,0 +1,33 @@
+- generic [ref=f14e5]:
+  - banner [ref=f14e6]:
+    - generic [ref=f14e7]:
+      - heading "Access AI" [level=1] [ref=f14e8]
+      - generic [ref=f14e9]:
+        - generic [ref=f14e10]: Guest GUEST
+        - button "Sign out" [ref=f14e11] [cursor=pointer]
+    - paragraph [ref=f14e15]: See, speak, sign — accessibility that works with or without internet.
+    - group "Display settings" [ref=f14e16]:
+      - button "High contrast" [ref=f14e17] [cursor=pointer]
+      - 'button "Text size: A" [ref=f14e18] [cursor=pointer]'
+  - tablist "Features" [ref=f14e19]:
+    - tab "Screen Reader" [ref=f14e20] [cursor=pointer]
+    - tab "Text to Speech" [active] [selected] [ref=f14e21] [cursor=pointer]
+    - tab "Speech to Sign" [ref=f14e22] [cursor=pointer]
+  - main [ref=f14e23]:
+    - tabpanel "Text to Speech" [ref=f14e51]:
+      - generic [ref=f14e58]:
+        - heading "Text to Speech" [level=2] [ref=f14e59]
+        - paragraph [ref=f14e60]: Neural voices online, device voices offline. Never silent.
+      - generic [ref=f14e61]: Text to convert
+      - textbox "Text to convert" [ref=f14e62]:
+        - /placeholder: Paste a medicine label, an exam question, or a message...
+      - generic [ref=f14e63]: 0 / 2000
+      - generic "Sample texts" [ref=f14e65]:
+        - button "Take one tablet after food, tw..." [ref=f14e66] [cursor=pointer]
+        - 'button "Question 4: Explain the full a..." [ref=f14e70] [cursor=pointer]'
+      - generic [ref=f14e74]:
+        - button "Speak" [ref=f14e75] [cursor=pointer]
+        - button "Stop" [ref=f14e80] [cursor=pointer]
+  - contentinfo [ref=f14e48]:
+    - paragraph [ref=f14e49]: cuda · medium · 150 requests · 1542 MB · 1164s up
+    - paragraph [ref=f14e50]: Built for HackSpora 2.0 · Access AI

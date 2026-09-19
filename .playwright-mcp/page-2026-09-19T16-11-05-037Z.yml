@@ -1,0 +1,21 @@
+- generic [ref=f12e69]:
+  - generic [ref=f12e70]:
+    - paragraph [ref=f12e71]: ACCESSIBILITY, REIMAGINED
+    - heading "Access AI" [level=1] [ref=f12e75]
+    - paragraph [ref=f12e76]: See, speak, sign — accessibility without limits.
+  - tablist "Account access" [ref=f12e77]:
+    - tab "Sign In" [selected] [ref=f12e78] [cursor=pointer]
+    - tab "Create Account" [ref=f12e79] [cursor=pointer]
+  - generic [ref=f12e80]:
+    - generic [ref=f12e81]:
+      - generic [ref=f12e82]: Email address
+      - textbox "Email address" [ref=f12e83]:
+        - /placeholder: Email Address
+    - generic [ref=f12e84]:
+      - generic [ref=f12e85]: Password
+      - textbox "Password" [ref=f12e86]
+      - button "Show password" [ref=f12e87] [cursor=pointer]
+    - button "Sign In" [ref=f12e91] [cursor=pointer]
+  - generic [ref=f12e96]: OR
+  - button "Enter Demo Mode (No Account)" [ref=f12e97] [cursor=pointer]
+  - paragraph [ref=f12e101]: One tap in. No account required for your demo.

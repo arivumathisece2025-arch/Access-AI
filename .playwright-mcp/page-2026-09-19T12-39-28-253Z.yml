@@ -1,0 +1,36 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - heading "Access AI" [level=1] [ref=e5]
+    - paragraph [ref=e6]: See, speak, sign — accessibility that works with or without internet.
+    - group "Display settings" [ref=e7]:
+      - button "High contrast" [ref=e8] [cursor=pointer]
+      - 'button "Text size: A" [ref=e9] [cursor=pointer]'
+  - tablist "Features" [ref=e10]:
+    - tab "Screen Reader" [ref=e11] [cursor=pointer]
+    - tab "Text to Speech" [ref=e12] [cursor=pointer]
+    - tab "Speech to Sign" [active] [selected] [ref=e13] [cursor=pointer]
+  - main [ref=e14]:
+    - tabpanel "Speech to Sign" [ref=e25]:
+      - heading "Speech to Sign Language" [level=2] [ref=e26]
+      - paragraph [ref=e27]: Speak a supported phrase. It is transcribed live and signed in Indian Sign Language.
+      - generic "Supported phrases - try saying one of these" [ref=e28]:
+        - generic [ref=e29]: I need help
+        - generic [ref=e30]: I need water
+        - generic [ref=e31]: Where is the hospital
+        - generic [ref=e32]: My name is
+        - generic [ref=e33]: Thank you
+        - generic [ref=e34]: I am sorry
+        - generic [ref=e35]: "Yes"
+        - generic [ref=e36]: "No"
+        - generic [ref=e37]: I have pain here
+        - generic [ref=e38]: I need medicine
+        - generic [ref=e39]: Call my family
+        - generic [ref=e40]: I do not understand
+      - button "Start listening" [ref=e42] [cursor=pointer]
+      - generic [ref=e43]:
+        - heading "Heard" [level=3] [ref=e44]
+        - paragraph [ref=e45]: ...
+      - generic "Sign language interpretation" [ref=e47]
+  - contentinfo [ref=e22]:
+    - paragraph [ref=e23]: cuda · medium · 10 requests · 1421.7 MB · 1968s up
+    - paragraph [ref=e24]: Built for HackSpora 2.0 · Access AI
