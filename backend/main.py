@@ -46,6 +46,7 @@ WHISPER_COMPUTE = "float16" if DEVICE == "cuda" else "int8"
 DEFAULT_VOICE = os.environ.get("TTS_VOICE", "en-IN-NeerjaNeural")
 FLORENCE_TASK = "<CAPTION>"
 MAX_TTS_CHARS = 2000
+RATE_RE = re.compile(r"^[+-]\d{1,2}%$")
 
 # ---------------------------------------------------------------------------
 # Model loading (once, at import; server only accepts traffic after warmup)
@@ -319,17 +320,23 @@ async def speech_to_sign(file: UploadFile = File(...)):
 
 
 @app.post("/text-to-speech")
-async def text_to_speech(text: str = Form(...), voice: str = Form(DEFAULT_VOICE)):
+async def text_to_speech(
+    text: str = Form(...),
+    voice: str = Form(DEFAULT_VOICE),
+    rate: str = Form("+0%"),
+):
     text = text.strip()
     if not text:
         return JSONResponse(status_code=422, content={"error": "Text must not be empty"})
     if len(text) > MAX_TTS_CHARS:
         return JSONResponse(status_code=413,
                             content={"error": f"Text exceeds {MAX_TTS_CHARS} characters"})
+    if not RATE_RE.match(rate):
+        return JSONResponse(status_code=422, content={"error": "Rate must be like +10% or -20%"})
 
     tmp = os.path.join(tempfile.gettempdir(), f"tts_{uuid4().hex}.mp3")
     try:
-        communicate = edge_tts.Communicate(text, voice)
+        communicate = edge_tts.Communicate(text, voice, rate=rate)
         await communicate.save(tmp)
         with open(tmp, "rb") as fh:
             audio = fh.read()

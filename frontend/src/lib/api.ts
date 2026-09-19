@@ -21,8 +21,10 @@ export async function speechToSign(blob: Blob): Promise<SignResult> {
   const form = new FormData(); form.append('file', blob, 'chunk.webm');
   const { data } = await http.post<SignResult>('/speech-to-sign', form); return data;
 }
-export async function textToSpeechAudio(text: string): Promise<Blob> {
+export async function textToSpeechAudio(text: string, voice?: string, rate?: string): Promise<Blob> {
   const form = new FormData(); form.append('text', text);
+  if (voice) form.append('voice', voice);
+  if (rate) form.append('rate', rate);
   const { data } = await http.post<Blob>('/text-to-speech', form, { responseType: 'blob' }); return data;
 }
 export async function fetchMetrics(): Promise<Metrics> {

@@ -32,10 +32,10 @@ export function cancelSpeech(): void {
   if (serverAudio) { serverAudio.pause(); serverAudio = null; }
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
-export async function speakWithFallback(text: string): Promise<void> {
+export async function speakWithFallback(text: string, voice?: string, rate?: string): Promise<void> {
   cancelSpeech();
   try {
-    const blob = await textToSpeechAudio(text); const url = URL.createObjectURL(blob);
+    const blob = await textToSpeechAudio(text, voice, rate); const url = URL.createObjectURL(blob);
     serverAudio = new Audio(url);
     serverAudio.onended = () => { URL.revokeObjectURL(url); serverAudio = null; };
     await serverAudio.play(); return;
