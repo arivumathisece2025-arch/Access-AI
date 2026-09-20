@@ -1,0 +1,36 @@
+url=http://localhost:5173/
+[ok] auth page rendered
+[ok] guest session established, shell rendered
+[ok] Text to Speech panel mounted
+[ok] voice=en-GB-SoniaNeural rate=+30% (slider step=10)
+before_play={"pill":"local · gpu","pillHasDot":true,"playing":false,"bars":0,"waveformLabel":null,"playDisabled":false,"playLabel":"Speak","rate":"+30%","voice":"en-GB-SoniaNeural","chars":232}
+[ok] waveform indicator appeared (utterance in flight)
+[ok] screenshot saved: C:\Users\blues\OneDrive\Documents\access-ai\Access-AI\docs\tts-playback-d0f22ff.png
+mid_play={"pill":"local · gpu","pillHasDot":true,"playing":true,"bars":5,"waveformLabel":"Speech playing","playDisabled":true,"playLabel":"Speaking...","rate":"+30%","voice":"en-GB-SoniaNeural","chars":232}
+after_play={"pill":"local · gpu","pillHasDot":true,"playing":false,"bars":0,"waveformLabel":null,"playDisabled":false,"playLabel":"Speak","rate":"+30%","voice":"en-GB-SoniaNeural","chars":232}
+[ok] playback finished, playing state cleared
+request={"url":"http://localhost:8000/text-to-speech","hasVoiceField":true,"hasRateField":true,"rateValue":"+30%","voiceValue":"en-GB-SoniaNeural","textChars":232}
+
+[PASS] mid.playing==true
+[PASS] mid.bars==5
+[PASS] mid.waveformLabel=="Speech playing"
+[PASS] mid.playDisabled==true
+[PASS] mid.playLabel contains "Speaking"
+[PASS] mid.rate==expected
+[PASS] mid.voice=="en-GB-SoniaNeural"
+[PASS] request.hasRateField
+[PASS] request.rateValue==expected
+[PASS] request.hasVoiceField
+[PASS] after.playDisabled==false
+[PASS] no.page_errors
+checks passed=12 failed=0
+
+NOTE rate slider: step=10 min=-50 max=50
+NOTE requested +25% snapped to +30%; x1.25 is NOT reachable at step=10
+NOTE playing indicator: .waveform (aria-label "Speech playing") with 5 .wave-bar
+NOTE this revision has no .state-pill / .vu.live / [aria-label="Speak text"] DOM
+console_messages(3):
+  debug: [vite] connecting...
+  debug: [vite] connected.
+  info: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+page_errors(0):

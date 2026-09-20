@@ -1,0 +1,42 @@
+url=http://localhost:5173/
+[ok] guest session established, new shell rendered
+[ok] navigated via nav button
+[ok] Text to Speech page mounted
+voice chips: ["Neerja · IN","Prabhat · IN","Sonia · UK","Aria · US"]
+rate chips: ["0.75x","1x","1.25x","1.5x"]
+[ok] activeVoice=Sonia · UK activeRate=1.25x
+before_play={"pill":"ready","pillBusy":false,"vuLive":false,"vuBars":0,"playAria":"Speak text","stopDisabled":true,"activeVoice":"Sonia · UK","activeRate":"1.25x","chars":232,"chrome":{"localText":false,"techText":false,"contentinfo":0,"numberedNavBadges":0}}
+[ok] .state-pill.busy AND .vu.live both live (utterance in flight)
+[ok] screenshot saved: C:\Users\blues\OneDrive\Documents\access-ai\Access-AI\docs\tts-playback-premium.png
+mid_play={"pill":"on air","pillBusy":true,"vuLive":true,"vuBars":7,"playAria":"Speak text","stopDisabled":false,"activeVoice":"Sonia · UK","activeRate":"1.25x","chars":232,"chrome":{"localText":false,"techText":false,"contentinfo":0,"numberedNavBadges":0}}
+[net] POST /text-to-speech -> HTTP 200
+after_play={"pill":"ready","pillBusy":false,"vuLive":false,"vuBars":0,"playAria":"Speak text","stopDisabled":true,"activeVoice":"Sonia · UK","activeRate":"1.25x","chars":232,"chrome":{"localText":false,"techText":false,"contentinfo":0,"numberedNavBadges":0}}
+[ok] playback finished, pill returned to idle
+request={"hasVoiceField":true,"hasRateField":true,"rateValue":"+25%","voiceValue":"en-GB-SoniaNeural"}
+response_status=200
+
+[PASS] mid.pillBusy==true
+[PASS] mid.pill=="on air"
+[PASS] mid.vuLive==true
+[PASS] mid.vuBars==7
+[PASS] mid.playAria=="Speak text"
+[PASS] mid.stop enabled while speaking
+[PASS] mid.activeRate has 1.25
+[PASS] mid.activeVoice has Sonia
+[PASS] tts response HTTP 200
+[PASS] request.rateValue=="+25%"
+[PASS] request.hasVoiceField
+[PASS] after.pillBusy==false
+[PASS] after.pill=="ready"
+[PASS] no LOCAL console text
+[PASS] no cuda/model/localhost/p50 text nodes
+[PASS] no footer region
+[PASS] no numbered nav badges
+[PASS] no.page_errors
+checks passed=18 failed=0
+
+console_messages(3):
+  debug: [vite] connecting...
+  debug: [vite] connected.
+  info: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+page_errors(0):
