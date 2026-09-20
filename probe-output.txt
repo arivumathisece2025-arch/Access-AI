@@ -1,0 +1,54 @@
+== env ==
+base=http://localhost:8000 repo=C:\Users\blues\OneDrive\Documents\access-ai\Access-AI
+date=2026-09-20T03:16:02.2701625+05:30
+== metrics ==
+{"rss_mb":1551.3,"uptime_s":51.1,"requests_served":2,"cache_entries":0,"device":"cuda","whisper_model":"medium"}
+[PASS] metrics.http code=200
+[PASS] metrics.device=cuda device=cuda
+== describe#1 (cold) ==
+describe#1 http=200 total=1.680259s bytes=530
+{"caption":"access ai benchmark page take one tablet after food twice a day question 4 explain the full adder circuit","extracted_text":"Access Al benchmark page. Take one tablet after food twice a day. Question 4: Explain the full adder circuit.","full_description":"access ai benchmark page take one tablet after food twice a day question 4 explain the full adder circuit. Text found: Access Al benchmark page. Take one tablet after food twice a day. Question 4: Explain the full adder circuit.","cached":false,"elapsed_s":1.45}
+[PASS] describe#1.http code=200
+[PASS] describe#1.cached=false cached=False
+== describe#2 (expect cached=true) ==
+describe#2 http=200 total=0.207448s bytes=528
+[PASS] describe#2.cached=true cached=True
+[PASS] describe#2.faster_than_cold cold=1.680259s warm=0.207448s
+[PASS] describe#2.same_caption caption stability
+== tts baseline (rate=+0%) ==
+tts +0%  http=200 total=1.202613s bytes=27504
+[PASS] tts.baseline.http code=200
+== tts +25% ==
+tts +25% http=200 total=1.080743s bytes=27504
+[PASS] tts.faster.http code=200
+[PASS] tts.valid_mp3_frame FF F3 64
+== tts rate honoured (payload delta) ==
+bytes +0%=27504 +25%=27504 delta=0
+[SKIP] tts.rate_applied - rate parameter is ignored by this revision
+== tts bad rate (expect 422) ==
+tts bad-rate http=200 bytes=11232
+body: <binary audio, 11232 bytes deliberately not printed>
+[FAIL] tts.bad_rate_422 code=200
+== endpoint capability ==
+text-to-speech rate parameter: ABSENT - field silently ignored, every rate returns 200
+== frontend DOM contract (static source check) ==
+selector 'state-pill' -> 0 match(es)
+selector 'vu-bar' -> 0 match(es)
+selector 'aria-label="Speak text"' -> 0 match(es)
+selector 'waveform' -> 0 match(es)
+selector 'wave-bar' -> 0 match(es)
+selector 'rate-slider' -> 0 match(es)
+selector 'voice-select' -> 0 match(es)
+== summary ==
+[PASS] metrics.http code=200
+[PASS] metrics.device=cuda device=cuda
+[PASS] describe#1.http code=200
+[PASS] describe#1.cached=false cached=False
+[PASS] describe#2.cached=true cached=True
+[PASS] describe#2.faster_than_cold cold=1.680259s warm=0.207448s
+[PASS] describe#2.same_caption caption stability
+[PASS] tts.baseline.http code=200
+[PASS] tts.faster.http code=200
+[PASS] tts.valid_mp3_frame FF F3 64
+[FAIL] tts.bad_rate_422 code=200
+passed=10 failed=1
